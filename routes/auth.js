@@ -45,12 +45,12 @@ route.post('/sign_up_admin', async (req, res) => {
         await user.save();
         await welcome_mail(email, fullname);
 
+        // generate jwt token
         const token = jwt.sign(
             { user_id: _id, email: email, role: role, department: department },
             process.env.JWT_SECRET_KEY,
             { expiresIn: '1d' }
         );
-
 
         return res.status(200).send({ status: 'ok', msg: 'Successfully signed up', token });
     } catch (e) {
