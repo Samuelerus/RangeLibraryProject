@@ -7,22 +7,25 @@ const app = express();
 app.use(express.json());
 
 //import my routes
-app.use('/user_auth', require('./routes/auth'));
+app.use('/auth', require('./routes/auth'));
 app.use('/books', require('./routes/books'));
+app.use('/profile', require('./routes/profile'));
+app.use('/special', require('./routes/special'));
+app.use('/author', require('./routes/author'));
 
 
 //connect to monogdb using the url in the env variable
-mongoose.connect(process.env.MONGO_URI_LOCAL)
-.catch(error => console.log(`DB connection error: ${error}`));
+mongoose.connect(process.env.MONGO_URI)
+    .catch(error => console.log(`DB connection error: ${error}`));
 
 const con = mongoose.connection;
 
 //handle errors when opening mongodb
 con.on('open', error => {
-    if(!error)
-    console.log('DB connection successful');
+    if (!error)
+        console.log('DB connection successful, connected to', mongoose.connection.name);
     else
-    console.log(`Error connecting to DB: ${error}`)
+        console.log(`Error connecting to DB: ${error}`)
 });
 
 //handle mongoose disconnects from mongodb'
